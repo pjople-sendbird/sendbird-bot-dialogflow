@@ -10,7 +10,13 @@ var ENTRYPOINT = 'https://api-D1CB1742-A4A3-44B9-9E7F-126D14BAB34B.sendbird.com/
 
 /**
  * DIALOGFLOW CONFIGURATION
- */
+ * 
+ * To use this app you must login first with google:
+ * gcloud auth application-default login. 
+ * 
+ * INSTALL gcloud FROM HERE:
+ * https://cloud.google.com/sdk/docs/install
+*/
 var DIALOGFLOW_PROJECT_ID = 'agent-9uyq';
 var GOOGLE_SESSION_ID = '2eccb33b-8494-40dd-ac92-212972b9dbea';
 var DIALOGFLOW_LANG = 'en-US';
@@ -20,9 +26,8 @@ var DIALOGFLOW_LANG = 'en-US';
  */
 var sb;
 
-
 /**
- * Include EMPRESS framework 
+ * Include EXPRESS framework 
  * and body parser
  */
 const express = require('express');
@@ -51,13 +56,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-/**
-  * To use this app you must login first with google:
-  * gcloud auth application-default login
-  * 
-  * INSTALL gcloud FROM HERE:
-  * https://cloud.google.com/sdk/docs/install
-  */
 
 /**
  * Show welcome screen
@@ -134,7 +132,6 @@ app.put('/bots/:id', async (req, res) => {
     })
 });
 
-
 /**
  * Add bot to channel
  * ===================
@@ -158,16 +155,28 @@ app.get('/bots/:channel_url/:bot_id', async (req, res) => {
 app.post('/callback', express.json(), async (req, res) => {
     const { message, bot, channel } = req.body;
     if (message && bot && channel) {
-        // Get bot id and channel url
+        /**
+         * Get bot id and channel url
+         */
         const botId = bot.bot_userid;
         const channelUrl = channel.channel_url;
-        // Get input text and send to dialogflow
+        /**
+         * Get input text and send to dialogflow
+         */
         const msgText = message.text;
         console.log('Sending to DialogFlow...');
-        // Send to dialogflow
+        /**
+         * Send user message from Sendbird to dialogflow
+         */
         sendToDialogFlow(msgText, async (response) => {
             console.log('Response from DF: ' + response);
+            /**
+             * Lastly, send Dialogflow response to chat using our Bot
+             */
             await fromDialogFlowSendMessageToChannel(response, channelUrl, botId);
+            /**
+             * Respond HTTP OK (200)
+             */
             res.status(200).json({
                 message: 'Response from DialogFlow: ' + response
             });        
@@ -184,8 +193,6 @@ app.listen(5500, () => console.log('Sendbid DialogFlow BOT listening on port 550
 /**
  * HELPER FUNCTIONS
  */
-
- 
 function init(callback) {
     sb = new SendBird({appId: APP_ID});
     sb.connect(USER_ID, function(user, error) {
