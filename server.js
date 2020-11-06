@@ -2,10 +2,10 @@
 /**
  * Enter your Sendbird information
  */
-var APP_ID = 'D1CB1742-A4A3-44B9-9E7F-126D14BAB34B';
+var APP_ID = '';
 var USER_ID = 'test1';
-var TOKEN = 'f22ab76e171974de6b87166a43a0e6d6e5899e2a';
-var ENTRYPOINT = 'https://api-D1CB1742-A4A3-44B9-9E7F-126D14BAB34B.sendbird.com/v3/bots';
+var TOKEN = '';
+var ENTRYPOINT = '';
 
 
 /**
@@ -17,8 +17,8 @@ var ENTRYPOINT = 'https://api-D1CB1742-A4A3-44B9-9E7F-126D14BAB34B.sendbird.com/
  * INSTALL gcloud FROM HERE:
  * https://cloud.google.com/sdk/docs/install
 */
-var DIALOGFLOW_PROJECT_ID = 'agent-9uyq';
-var GOOGLE_SESSION_ID = '2eccb33b-8494-40dd-ac92-212972b9dbea';
+var DIALOGFLOW_PROJECT_ID = '';
+var GOOGLE_SESSION_ID = '';
 var DIALOGFLOW_LANG = 'en-US';
 
 /**
@@ -88,7 +88,7 @@ app.get('/bots', async (req, res) => {
  *   "bot_nickname": "bot1",
  *   "bot_profile_url": "https://via.placeholder.com/50x50",
  *   "bot_type": "DialogFlow",
- *   "bot_callback_url": "http://localhost:5500",
+ *   "bot_callback_url": "https://730eb8b5bc29.ngrok.io/callback",
  *   "is_privacy_mode": false
  * }
  */
@@ -290,6 +290,7 @@ async function executeQueries(projectId, sessionId, queries, languageCode, callb
                 context,
                 languageCode
             );
+            console.log(intentResponse.queryResult);
             const responseText = intentResponse.queryResult.fulfillmentText;
             context = intentResponse.queryResult.outputContexts;
             callback(responseText);
